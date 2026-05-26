@@ -1,11 +1,11 @@
-﻿using System.Text.Json;
-using Amazon.DynamoDBv2;
+﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.Lambda.Core;
 using Amazon.Lambda.Serialization.SystemTextJson;
 using Amazon.Lambda.SNSEvents;
 using HotelCreatedEventHandler.Models;
-using Nest;
+using OpenSearch.Client;
+using System.Text.Json;
 
 [assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
@@ -15,21 +15,28 @@ public class HotelCreatedEventHandler
 {
     public async Task Handler(SNSEvent snsEvent)
     {
-        Console.WriteLine("Lambda was invoked.");
+        Console.WriteLine("Lambda was invoked from SNS.");
         var dbClient = new AmazonDynamoDBClient();
         var table = Table.LoadTable(dbClient, "hotel-created-event-ids");
 
         var host = Environment.GetEnvironmentVariable("host");
+        Console.WriteLine($"Host Name: {host}");
+
         var userName = Environment.GetEnvironmentVariable("userName");
+        Console.WriteLine($"User Name: {userName}");
+
         var password = Environment.GetEnvironmentVariable("password");
+
         var indexName = Environment.GetEnvironmentVariable("indexName");
+        Console.WriteLine($"Index Name: {indexName}");
 
-        var connSettings = new ConnectionSettings(new Uri(host));
-        connSettings.BasicAuthentication(userName, password);
-        connSettings.DefaultIndex(indexName);
-        connSettings.DefaultMappingFor<Hotel>(m => m.IdProperty(p => p.Id));
+        var settings = new ConnectionSettings(
+                    new Uri(host))
+                    .DefaultIndex(indexName)
+                    .BasicAuthentication(userName, password)
+                    .DefaultMappingFor<Hotel>(m => m.IdProperty(p => p.Id));
 
-        var esClient = new ElasticClient(connSettings);
+        var esClient = new OpenSearchClient(settings);
 
         if (!(await esClient.Indices.ExistsAsync(indexName)).Exists) await esClient.Indices.CreateAsync(indexName);
 
@@ -42,13 +49,39 @@ public class HotelCreatedEventHandler
             if (foundItem == null)
                 await table.PutItemAsync(new Document
                 {
-                    ["eventId"] = eventId
+                    ["eventid"] = eventId
                 });
+
+            Console.WriteLine($"Message data : {eventRecord.Sns.Message}");
 
             var hotel = JsonSerializer.Deserialize<Hotel>(eventRecord.Sns.Message);
 
-            var response = await esClient.IndexDocumentAsync<Hotel>(hotel);
-            if (response.Result == Result.Error) Console.WriteLine($"Server Error:{response.ServerError.Error.Reason}");
+            var response = esClient.IndexDocumentAsync<Hotel>(hotel);
+
+            if (response != null)
+            {
+                Console.WriteLine($"Debug Information :: {response.IsCompletedSuccessfully}");
+
+                if (response.Result.Result == Result.Error)
+                {
+                    if (response.Result.ServerError != null)
+                    {
+                        Console.WriteLine($"Server Error:{response.Result.ServerError}");
+                    }
+                    else if (response.Result.ServerError.Error != null)
+                    {
+                        Console.WriteLine($"Server Error Reason:{response.Result.ServerError.Error.Reason}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Server Error is null");
+                    }
+                }
+            }
+            else
+            {
+                Console.WriteLine("Response object is null");
+            }
         }
     }
 }
