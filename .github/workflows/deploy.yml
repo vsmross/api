@@ -23,6 +23,7 @@ jobs:
       run: |
         cd HotelAdmin
         dotnet restore
+        cd HotelMan_HotelAdmin
         dotnet tool install -g Amazon.Lambda.Tools
         dotnet lambda package --configuration release .\HotelMan_HotelAdmin.csproj -o "./publish/hoteladmin-lambda.zip"
     # Zip only HotelAdmin output
