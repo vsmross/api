@@ -56,7 +56,6 @@ public class HotelAdmin
             return response;
         }
 
-
         var tokenDetails = new JwtSecurityToken(token);
         var userId = tokenDetails.Claims.FirstOrDefault(x => x.Type == "sub")?.Value;
 
