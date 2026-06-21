@@ -37,7 +37,7 @@ public class HotelAdmin
         response.Headers.Add("Access-Control-Allow-Headers", "*");
         response.Headers.Add("Access-Control-Allow-Methods", "OPTIONS,GET");
 
-        Console.WriteLine("OK");
+        Console.WriteLine("Received OK response");
 
         response.Headers.Add("Content-Type", "application/json");
 
