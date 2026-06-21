@@ -31,7 +31,7 @@ jobs:
     # Zip only HotelAdmin output
     - name: Create ZIP
       run: |
-        cd HotelAdmin/publish
+        cd HotelAdmin/HotelMan_HotelAdmin/publish
         zip -r ../../hoteladmin-lambda.zip .
 
     # Configure AWS
