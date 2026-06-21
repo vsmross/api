@@ -6,7 +6,6 @@ namespace HotelMan_HotelAdmin.Models;
 public class Hotel
 {
     [DynamoDBHashKey("userid")] public string? UserId { get; set; }
-
     [DynamoDBRangeKey("id")] public string? Id { get; set; }
 
     public string? Name { get; set; }
