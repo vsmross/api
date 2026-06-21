@@ -28,11 +28,6 @@ jobs:
         ls -l
         dotnet tool install -g Amazon.Lambda.Tools
         dotnet lambda package --configuration release .\HotelMan_HotelAdmin.csproj -o "./publish/hoteladmin-lambda.zip"
-    # Zip only HotelAdmin output
-    - name: Create ZIP
-      run: |
-        cd HotelAdmin/HotelMan_HotelAdmin/publish
-        zip -r ../../../hoteladmin-lambda.zip .
 
     # Configure AWS
     - name: Configure AWS
@@ -45,4 +40,5 @@ jobs:
     # Upload artifact to S3
     - name: Upload to S3
       run: |
-        aws s3 cp hoteladmin-lambda.zip s3://hotel-lambda-artifacts-bucket/lambda/hoteladmin-lambda.zip
+        ls -l
+        aws s3 cp ./publish/hoteladmin-lambda.zip s3://hotel-lambda-artifacts-bucket/lambda/hoteladmin-lambda.zip
