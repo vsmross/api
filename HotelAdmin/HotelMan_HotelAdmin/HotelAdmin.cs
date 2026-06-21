@@ -21,13 +21,13 @@ using HttpMultipartParser;
 
 namespace HotelMan_HotelAdmin;
 
+
 // Main Hotel admin class
 public class HotelAdmin
 {
     public async Task<APIGatewayProxyResponse> ListHotels(APIGatewayProxyRequest request)
     {
         // query string parameter called token is passed to this lambda method.
-
         var response = new APIGatewayProxyResponse
         {
             Headers = new Dictionary<string, string>(),
