@@ -21,7 +21,6 @@ using HttpMultipartParser;
 
 namespace HotelMan_HotelAdmin;
 
-
 // Main Hotel admin class
 public class HotelAdmin
 {
