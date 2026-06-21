@@ -9,6 +9,5 @@ public class HotelCreatedEvent
     public int Rating { get; set; }
     public string? CityName { get; set; }
     public string? FileName { get; set; }
-
     public DateTime CreationDateTime { get; set; }
 }
