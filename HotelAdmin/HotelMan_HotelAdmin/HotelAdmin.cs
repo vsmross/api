@@ -21,6 +21,7 @@ using HttpMultipartParser;
 
 namespace HotelMan_HotelAdmin;
 
+// Main Hotel admin class
 public class HotelAdmin
 {
     public async Task<APIGatewayProxyResponse> ListHotels(APIGatewayProxyRequest request)
