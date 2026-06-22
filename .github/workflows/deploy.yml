@@ -40,19 +40,6 @@ jobs:
       run: |
         aws s3 cp ./HotelAdmin/HotelMan_HotelAdmin/publish/hoteladmin-lambda-v${{ github.run_number }}.zip s3://hotel-app-lambda-artifacts-bucket/lambda/hoteladmin-lambda-v${{ github.run_number }}.zip
 
-    - name: Trigger Terraform Deployment
-      run: |
-        curl -X POST \
-          -H "Accept: application/vnd.github+json" \
-          -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
-          https://api.github.com/repos/vsmross/infra/actions/workflows/deploy.yml/dispatches \
-          -d '{
-            "ref": "main",
-            "inputs": {
-              "s3_key": "lambda/hoteladmin-v${{ github.run_number }}.zip"
-            }
-          }'
-
     # terraform trigger    
     - name: Trigger Terraform Deployment
       run: |
