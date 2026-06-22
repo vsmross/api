@@ -61,7 +61,7 @@ jobs:
           -H "Authorization: Bearer ${{ secrets.GH_TOKEN }}" \
           https://api.github.com/repos/vsmross/infra/actions/workflows/dispatch.yml/dispatches \
           -d '{
-            "ref": "main",
+            "ref": "develop",
             "inputs": {
               "s3_key": "lambda/hoteladmin-v${{ github.run_number }}.zip"
             }
