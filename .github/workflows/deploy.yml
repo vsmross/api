@@ -38,7 +38,7 @@ jobs:
     # Upload artifact to S3
     - name: Upload to S3
       run: |
-        aws s3 cp ./HotelAdmin/HotelMan_HotelAdmin/publish/hoteladmin-lambda-v${{ github.run_number }}.zip s3://hotel-app-lambda-artifacts-bucket/lambda/hoteladmin-lambda.zip
+        aws s3 cp ./HotelAdmin/HotelMan_HotelAdmin/publish/hoteladmin-lambda-v${{ github.run_number }}.zip s3://hotel-app-lambda-artifacts-bucket/lambda/hoteladmin-lambda-v${{ github.run_number }}.zip
 
     - name: Trigger Terraform Deployment
       run: |
