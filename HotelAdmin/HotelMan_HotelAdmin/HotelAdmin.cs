@@ -19,7 +19,7 @@ using HttpMultipartParser;
 
 [assembly: LambdaSerializer(typeof(DefaultLambdaJsonSerializer))]
 
-// change this for dummy commit to trigger a pipeline
+// changed this for dummy commit to trigger a pipeline
 namespace HotelMan_HotelAdmin;
 
 // Main Hotel admin class
